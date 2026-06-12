@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Lokale Ziel — Reisblog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:       #14100d;
+    --ink-mid:   #4a3f36;
+    --ink-soft:  #8a7b70;
+    --ink-faint: #c4b8b0;
+    --paper:     #faf7f2;
+    --paper-2:   #f2ebe0;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 4rem 2rem 3rem;
+    border-bottom: 1px solid #e0d8d0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 1rem;
+  }
+
+  .brand {
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .brand-sub {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 0.5rem;
+  }
+
+  .entry-count {
+    font-family: var(--serif);
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  /* ── ENTRY CARD ── */
+  .card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--paper);
+    border: 1px solid #e0d8d0;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(20,16,13,0.08); }
+
+  .card-photo {
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--paper-2);
+    position: relative;
+    cursor: pointer;
+  }
+
+  .card-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .card:hover .card-photo img { transform: scale(1.04); }
+
+  .card-photo .photo-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px;
+  }
+
+  .card-photo .photo-placeholder svg {
+    width: 36px; height: 36px;
+    stroke: var(--ink-faint); fill: none; stroke-width: 1.2;
+  }
+
+  .card-photo .photo-placeholder span {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .card-photo .upload-hint {
+    position: absolute; inset: 0;
+    background: rgba(20,16,13,0.18);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+  }
+
+  .card-photo:hover .upload-hint { opacity: 1; }
+
+  .upload-hint span {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 8px 18px;
+  }
+
+  .card-photo input[type=file] { display: none; }
+
+  /* kleurlijn per locatie */
+  .card-line { height: 2px; width: 100%; }
+
+  .card-body { padding: 1.5rem; }
+
+  .card-location {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .card-location::before {
+    content: '';
+    display: inline-block;
+    width: 14px; height: 1px;
+  }
+
+  .card-word {
+    font-family: var(--serif);
+    font-size: 2.2rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+
+  .card-lang {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .card-excerpt {
+    font-family: var(--serif);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--ink-mid);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e8e0d8;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .kw {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    border: 1px solid #e0d8d0;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── ROME kleuren ── */
+  .card--rome .card-line { background: #b85c38; }
+  .card--rome .card-location { color: #b85c38; }
+  .card--rome .card-location::before { background: #b85c38; }
+
+  /* ── CURAÇAO kleuren ── */
+  .card--curacao .card-line { background: #0ea5b0; }
+  .card--curacao .card-location { color: #0ea5b0; }
+  .card--curacao .card-location::before { background: #0ea5b0; }
+
+  /* ── CURAÇAO DAG 1 kleuren ── */
+  .card--curacao-dag1 .card-line { background: #e8602a; }
+  .card--curacao-dag1 .card-location { color: #e8602a; }
+  .card--curacao-dag1 .card-location::before { background: #e8602a; }
+
+  /* ── CURAÇAO DAG 2 kleuren ── */
+  .card--curacao-dag2 .card-line { background: #0078a0; }
+  .card--curacao-dag2 .card-location { color: #0078a0; }
+  .card--curacao-dag2 .card-location::before { background: #0078a0; }
+
+  /* ── CURAÇAO DAG 3 kleuren ── */
+  .card--curacao-dag3 .card-line { background: #e88a14; }
+  .card--curacao-dag3 .card-location { color: #d43a28; }
+  .card--curacao-dag3 .card-location::before { background: #d43a28; }
+
+  /* ── CURAÇAO DAG 4 kleuren ── */
+  .card--curacao-dag4 .card-line { background: #00b8a0; }
+  .card--curacao-dag4 .card-location { color: #00b8a0; }
+  .card--curacao-dag4 .card-location::before { background: #00b8a0; }
+
+  /* ── CURAÇAO DAG 5 kleuren ── */
+  .card--curacao-dag5 .card-line { background: #9e4a18; }
+  .card--curacao-dag5 .card-location { color: #9e4a18; }
+  .card--curacao-dag5 .card-location::before { background: #9e4a18; }
+
+  /* ── CURAÇAO DAG 6 kleuren ── */
+  .card--curacao-dag6 .card-line { background: #c8920a; }
+  .card--curacao-dag6 .card-location { color: #c04870; }
+  .card--curacao-dag6 .card-location::before { background: #c04870; }
+
+  /* ── CURAÇAO DAG 7 kleuren ── */
+  .card--curacao-dag7 .card-line { background: #d88020; }
+  .card--curacao-dag7 .card-location { color: #e87858; }
+  .card--curacao-dag7 .card-location::before { background: #e87858; }
+
+  /* ── AMSTERDAM DAG 8 kleuren ── */
+  .card--amsterdam-dag8 .card-line { background: #3868a8; }
+  .card--amsterdam-dag8 .card-location { color: #3868a8; }
+  .card--amsterdam-dag8 .card-location::before { background: #3868a8; }
+
+  /* ── LEES-KNOP ── */
+  .card-read {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 1rem 1.5rem 1.5rem;
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .card-read:hover { color: var(--ink); }
+
+  .card-read svg {
+    width: 14px; height: 14px;
+    stroke: currentColor; fill: none; stroke-width: 1.5;
+    transition: transform 0.2s;
+  }
+
+  .card-read:hover svg { transform: translateX(3px); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    border-top: 1px solid #e0d8d0;
+    padding: 2rem;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .masthead { grid-template-columns: 1fr; padding: 2.5rem 1.25rem 2rem; }
+    .grid { padding: 2rem 1.25rem 4rem; gap: 1.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover { transform: none; }
+    .card:hover .card-photo img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div>
+    <h1 class="brand">De Lokale Ziel</h1>
+    <p class="brand-sub">Één foto &nbsp;·&nbsp; één woord &nbsp;·&nbsp; de ziel van de dag</p>
+  </div>
+  <span class="entry-count">10 entries</span>
+</header>
+
+<main class="grid">
+
+  <!-- ROME -->
+  <article class="card card--rome">
+    <div class="card-photo" onclick="document.getElementById('foto-rome').click()">
+      <div class="photo-placeholder" id="ph-rome">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-rome" src="" alt="Rome dag 2" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-rome" accept="image/*" onchange="loadPhoto('rome', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Rome, Italië &nbsp;·&nbsp; Dag 2</p>
+      <h2 class="card-word">Dolce far niente</h2>
+      <p class="card-lang">Italiaans &nbsp;·&nbsp; dol-tsjee far nyen-teh</p>
+      <p class="card-excerpt">Het heerlijke niets-doen. De Italiaanse overtuiging dat rust een kunstvorm is, dat een espresso in de zon een morele keuze is, geen tijdverspilling.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">espresso</span>
+      <span class="kw">piazza</span>
+      <span class="kw">zon</span>
+      <span class="kw">traag lopen</span>
+      <span class="kw">kerk</span>
+    </div>
+    <a class="card-read" href="rome-dag2-dolce-far-niente.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO -->
+  <article class="card card--curacao">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao').click()">
+      <div class="photo-placeholder" id="ph-curacao">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao" src="" alt="Curaçao" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao" accept="image/*" onchange="loadPhoto('curacao', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Curaçao &nbsp;·&nbsp; Caribisch gebied</p>
+      <h2 class="card-word">Dushi</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; doe-sjie</p>
+      <p class="card-excerpt">Zoet, lief, heerlijk — maar op Curaçao is dushi meer dan een bijvoeglijk naamwoord. Het is een levenshouding. Het vat in één woord alles wat goed voelt.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">familie</span>
+      <span class="kw">luieren</span>
+      <span class="kw">lunch</span>
+      <span class="kw">zee</span>
+      <span class="kw">zon</span>
+    </div>
+    <a class="card-read" href="curacao-dushi.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO DAG 1 -->
+  <article class="card card--curacao-dag1">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao-dag1').click()">
+      <div class="photo-placeholder" id="ph-curacao-dag1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao-dag1" src="" alt="Curaçao dag 1" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao-dag1" accept="image/*" onchange="loadPhoto('curacao-dag1', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Curaçao &nbsp;·&nbsp; Dag 1 &nbsp;·&nbsp; 4 juni</p>
+      <h2 class="card-word">Bon Kòrsou</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; bon KOR-so</p>
+      <p class="card-excerpt">Welkom op Curaçao — maar de zin draagt meer gewicht dan een begroeting. Het is de aankondiging van een andere tijd, een andere lucht, een andere logica.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">aankomst</span>
+      <span class="kw">felle zon</span>
+      <span class="kw">nichtje</span>
+      <span class="kw">Nieuwe Straat</span>
+      <span class="kw">zwoele nacht</span>
+    </div>
+    <a class="card-read" href="curacao-dag1-bon-korsou.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO DAG 2 -->
+  <article class="card card--curacao-dag2">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao-dag2').click()">
+      <div class="photo-placeholder" id="ph-curacao-dag2">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao-dag2" src="" alt="Curaçao dag 2" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao-dag2" accept="image/*" onchange="loadPhoto('curacao-dag2', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Curaçao &nbsp;·&nbsp; Dag 2 &nbsp;·&nbsp; 5 juni</p>
+      <h2 class="card-word">Drai Laman</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; drai LA-man &nbsp;·&nbsp; draai de zee</p>
+      <p class="card-excerpt">De gewoonte om de zee steeds opnieuw te erkennen, haar nooit gewoon te vinden — ochtend bij de Pontjesbrug, middag met tonijn en familie, avond in de haven.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">Pontjesbrug</span>
+      <span class="kw">tonijn</span>
+      <span class="kw">zeelucht</span>
+      <span class="kw">familie</span>
+      <span class="kw">haven</span>
+    </div>
+    <a class="card-read" href="curacao-dag2-drai-laman.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO DAG 3 -->
+  <article class="card card--curacao-dag3">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao-dag3').click()">
+      <div class="photo-placeholder" id="ph-curacao-dag3">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao-dag3" src="" alt="Curaçao dag 3" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao-dag3" accept="image/*" onchange="loadPhoto('curacao-dag3', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Otrabanda &nbsp;·&nbsp; Dag 3 &nbsp;·&nbsp; 6 juni</p>
+      <h2 class="card-word">Otrabanda</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; O-tra BAN-da &nbsp;·&nbsp; de andere kant</p>
+      <p class="card-excerpt">De wijk aan de andere oever — niet de achterkant, maar de echte kant. Muren vol kleur, street art, local food, en 's avonds voetbal bij Zanzibar.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">street art</span>
+      <span class="kw">Otrabanda</span>
+      <span class="kw">local food</span>
+      <span class="kw">Zanzibar</span>
+      <span class="kw">voetbal</span>
+    </div>
+    <a class="card-read" href="curacao-dag3-otrabanda.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO DAG 4 -->
+  <article class="card card--curacao-dag4">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao-dag4').click()">
+      <div class="photo-placeholder" id="ph-curacao-dag4">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao-dag4" src="" alt="Curaçao dag 4" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao-dag4" accept="image/*" onchange="loadPhoto('curacao-dag4', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Curaçao &nbsp;·&nbsp; Dag 4 &nbsp;·&nbsp; 7 juni</p>
+      <h2 class="card-word">Bai buzu</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; bai BOE-zoo &nbsp;·&nbsp; ga duiken</p>
+      <p class="card-excerpt">Wie gedoken heeft, kijkt anders naar het oppervlak. Zeepaardjes op het rif, daarna poolside met brownies en het geluid van een bbq die langzaam op gang komt.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">duiken</span>
+      <span class="kw">zeepaardjes</span>
+      <span class="kw">poolside</span>
+      <span class="kw">brownies</span>
+      <span class="kw">bbq</span>
+    </div>
+    <a class="card-read" href="curacao-dag4-bai-buzu.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO DAG 5 -->
+  <article class="card card--curacao-dag5">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao-dag5').click()">
+      <div class="photo-placeholder" id="ph-curacao-dag5">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao-dag5" src="" alt="Curaçao dag 5" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao-dag5" accept="image/*" onchange="loadPhoto('curacao-dag5', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Curaçao &nbsp;·&nbsp; Dag 5 &nbsp;·&nbsp; 8 juni</p>
+      <h2 class="card-word">Para pober</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; PA-ra PO-ber &nbsp;·&nbsp; rustig aan</p>
+      <p class="card-excerpt">Stop maar, het hoeft niet zo. Een dag zonder agenda: betonnen zwembad, boek, voetbal, en de containers bij de haven die stilstaan maar onderweg lijken.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">rustiek zwembad</span>
+      <span class="kw">lezen</span>
+      <span class="kw">voetbal</span>
+      <span class="kw">containers</span>
+    </div>
+    <a class="card-read" href="curacao-dag5-para-pober.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO DAG 6 -->
+  <article class="card card--curacao-dag6">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao-dag6').click()">
+      <div class="photo-placeholder" id="ph-curacao-dag6">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao-dag6" src="" alt="Curaçao dag 6" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao-dag6" accept="image/*" onchange="loadPhoto('curacao-dag6', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Curaçao &nbsp;·&nbsp; Dag 6 &nbsp;·&nbsp; 9 juni</p>
+      <h2 class="card-word">Pabien</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; pa-BIEN &nbsp;·&nbsp; van harte gefeliciteerd</p>
+      <p class="card-excerpt">Meer dan een felicitatie — de warmte waarmee Curaçao viert. Van snorkelen boven het rif tot kaarsen, fine dining en wijn die rood was en naar de avond smaakte.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">strand</span>
+      <span class="kw">snorkelen</span>
+      <span class="kw">fine dining</span>
+      <span class="kw">verjaardag</span>
+      <span class="kw">wijn</span>
+    </div>
+    <a class="card-read" href="curacao-dag6-pabien.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- CURAÇAO DAG 7 -->
+  <article class="card card--curacao-dag7">
+    <div class="card-photo" onclick="document.getElementById('foto-curacao-dag7').click()">
+      <div class="photo-placeholder" id="ph-curacao-dag7">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-curacao-dag7" src="" alt="Curaçao dag 7" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-curacao-dag7" accept="image/*" onchange="loadPhoto('curacao-dag7', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Curaçao &nbsp;·&nbsp; Dag 7 &nbsp;·&nbsp; 10 juni</p>
+      <h2 class="card-word">Te awor</h2>
+      <p class="card-lang">Papiamentu &nbsp;·&nbsp; teh a-WOR &nbsp;·&nbsp; tot ziens voor nu</p>
+      <p class="card-excerpt">Niet het definitieve afscheid, maar het zachte dat een deur openhoudt. Nieuwe plekken, een ijs dat smolt, een hand die zwaait. Het eiland zal er nog zijn.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">laatste dag</span>
+      <span class="kw">nieuwe plekken</span>
+      <span class="kw">ijs</span>
+      <span class="kw">afscheid</span>
+    </div>
+    <a class="card-read" href="curacao-dag7-te-awor.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+  <!-- AMSTERDAM DAG 8 -->
+  <article class="card card--amsterdam-dag8">
+    <div class="card-photo" onclick="document.getElementById('foto-amsterdam-dag8').click()">
+      <div class="photo-placeholder" id="ph-amsterdam-dag8">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+        <span>Foto toevoegen</span>
+      </div>
+      <img id="img-amsterdam-dag8" src="" alt="Amsterdam dag 8" style="display:none;">
+      <div class="upload-hint"><span>Foto kiezen</span></div>
+      <input type="file" id="foto-amsterdam-dag8" accept="image/*" onchange="loadPhoto('amsterdam-dag8', event)">
+    </div>
+    <div class="card-line"></div>
+    <div class="card-body">
+      <p class="card-location">Amsterdam &nbsp;·&nbsp; Dag 8 &nbsp;·&nbsp; 11 juni</p>
+      <h2 class="card-word">Thuiskomen</h2>
+      <p class="card-lang">Nederlands &nbsp;·&nbsp; het werkwoord dat een gevoel is</p>
+      <p class="card-excerpt">Niet simpelweg aankomen. Hij stond er gewoon — geen bord, geen gewacht, gewoon aanwezig, zoals broers dat zijn. Thuis is de plek die al op je wacht.</p>
+    </div>
+    <div class="card-footer">
+      <span class="kw">goede vlucht</span>
+      <span class="kw">nieuwe mensen</span>
+      <span class="kw">broer</span>
+      <span class="kw">thuis</span>
+    </div>
+    <a class="card-read" href="amsterdam-dag8-thuiskomen.html">
+      Lees entry
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  De Lokale Ziel &mdash; reizen in woorden
+</footer>
+
+<script>
+function loadPhoto(id, e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  document.getElementById('img-' + id).src = url;
+  document.getElementById('img-' + id).style.display = 'block';
+  document.getElementById('ph-' + id).style.display = 'none';
+}
+</script>
+
+</body>
+</html>

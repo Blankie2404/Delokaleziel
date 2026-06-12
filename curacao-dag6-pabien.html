@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pabien — Curaçao, Dag 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:          #100c18;
+    --ink-mid:      #2e2240;
+    --ink-soft:     #6a5880;
+    --ink-faint:    #b8a8cc;
+    --paper:        #faf8fc;
+    --paper-warm:   #f4f0f8;
+    --gold:         #c8920a;
+    --gold-pale:    #f0e0b0;
+    --gold-deep:    #906000;
+    --rose:         #c04870;
+    --rose-pale:    #f0ccd8;
+    --lagoon:       #20b8c8;
+    --lagoon-pale:  #b8ecf0;
+    --dusk:         #6848a8;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  /* Dag naar avond: lagune-blauw bovenin, diepe paarse schemering onderaan */
+  .hero {
+    width: 100%;
+    height: 100svh;
+    min-height: 480px;
+    max-height: 820px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(185deg,
+      #a8e8f0 0%,
+      #40c0d8 20%,
+      #1870b8 45%,
+      #3828a0 68%,
+      #200e48 85%,
+      #100820 100%
+    );
+    cursor: pointer;
+  }
+
+  /* Gouden horizon — de overgang van middag naar diner */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 42%;
+    left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(200,146,10,0.22) 40%,
+      rgba(192,72,112,0.18) 70%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Sterren voor de avond */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 18% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 72% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(2px 2px at 55% 5%, rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 22%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 38% 8%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 92% 14%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 8% 28%, rgba(255,255,255,0.3) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 10s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero:hover img { transform: scale(1.04); }
+
+  .hero-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 3;
+  }
+
+  .hero-placeholder svg {
+    width: 52px; height: 52px;
+    stroke: rgba(255,255,255,0.42); fill: none; stroke-width: 1.2;
+  }
+
+  .hero-placeholder span {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.38);
+  }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: rgba(16,8,32,0.3);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 6;
+  }
+
+  .hero:hover .hero-overlay { opacity: 1; }
+
+  .hero-overlay span {
+    color: rgba(255,255,255,0.9);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.38);
+    padding: 10px 24px;
+  }
+
+  .hero input[type=file] { display: none; }
+
+  .hero-meta {
+    position: absolute;
+    top: 2rem; left: 2.5rem;
+    z-index: 7;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  .hero-meta .serie {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .hero-meta .dag-nr {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .hero-date {
+    position: absolute;
+    top: 2rem; right: 2.5rem;
+    z-index: 7;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.32);
+  }
+
+  /* Wijnglas-silhouet rechtsonder — handtekening van de avond */
+  .hero-glass {
+    position: absolute;
+    bottom: 2rem;
+    right: 2.8rem;
+    z-index: 4;
+    opacity: 0.22;
+    pointer-events: none;
+  }
+
+  .hero-glass svg {
+    width: 32px;
+    height: 56px;
+    fill: rgba(240,208,176,0.9);
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── WOORDBLOK ── */
+  .idiom-section {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--gold-pale);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .idiom-section::before {
+    content: 'P';
+    font-family: var(--serif);
+    font-size: 28vw;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold-pale);
+    position: absolute;
+    right: -1.5rem;
+    top: 1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: 0.7;
+  }
+
+  .idiom-section > * { position: relative; z-index: 1; }
+
+  .locatie-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 2.5rem;
+  }
+
+  .locatie-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--rose);
+  }
+
+  .idiom-word {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 11vw, 7rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.9;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .idiom-word .accent { color: var(--gold); }
+
+  .idiom-phonetic {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+
+  .idiom-line {
+    width: 36px; height: 1px;
+    background: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+
+  .idiom-meaning {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--ink-mid);
+    max-width: 520px;
+  }
+
+  .idiom-meaning em {
+    color: var(--gold-deep);
+    font-style: italic;
+  }
+
+  /* ── VERHAAL ── */
+  .narrative-section { padding: 4rem 0; }
+
+  .narrative-text {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 580px;
+  }
+
+  .narrative-text p + p { margin-top: 1.5rem; }
+
+  /* Menu-notitie — het diner als kleine oplage */
+  .menu-note {
+    margin: 2rem 0;
+    padding: 1.6rem 1.8rem;
+    border: 1px solid var(--gold-pale);
+    background: var(--paper-warm);
+    position: relative;
+  }
+
+  .menu-note::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 1.8rem; right: 1.8rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .menu-note-label {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .menu-note-line {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.8;
+  }
+
+  .menu-note-line + .menu-note-line {
+    border-top: 1px solid var(--gold-pale);
+    padding-top: 0.4rem;
+    margin-top: 0.4rem;
+  }
+
+  .reflection {
+    margin: 2rem 0 0;
+    padding: 1.75rem 0 1.75rem 1.5rem;
+    border-left: 2px solid var(--rose);
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  /* ── KERNWOORDEN ── */
+  .keywords-section {
+    padding: 3rem 0 4rem;
+    border-top: 1px solid var(--gold-pale);
+  }
+
+  .keywords-label {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .kw {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-mid);
+    border: 1px solid var(--gold-pale);
+    padding: 5px 15px;
+    border-radius: 30px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .kw:hover { background: var(--gold-pale); border-color: var(--gold-pale); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--gold-pale);
+    padding: 2.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-serie {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .footer-date {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 0 1.25rem; }
+    .hero-meta { left: 1.25rem; }
+    .hero-date { right: 1.25rem; }
+    .idiom-section { padding: 3rem 0 2.5rem; }
+    .idiom-section::before { font-size: 45vw; }
+    .narrative-text, .idiom-meaning { font-size: 1.1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero:hover img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero" onclick="document.getElementById('foto-input').click()" title="Klik om een foto toe te voegen">
+  <div class="hero-placeholder" id="placeholder">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="15" rx="2"/>
+      <circle cx="12" cy="12.5" r="3.5"/>
+      <path d="M9 5l1.5-2h3L15 5"/>
+    </svg>
+    <span>Klik om jouw foto toe te voegen</span>
+  </div>
+  <img id="hero-img" src="" alt="Curaçao, dag 6" style="display:none;">
+  <div class="hero-overlay"><span>Foto vervangen</span></div>
+  <div class="hero-meta">
+    <span class="serie">De Lokale Ziel</span>
+    <span class="dag-nr">Dag 6 — Curaçao</span>
+  </div>
+  <div class="hero-date">9 juni</div>
+  <div class="hero-glass" aria-hidden="true">
+    <svg viewBox="0 0 32 56" xmlns="http://www.w3.org/2000/svg">
+      <!-- wijnglas -->
+      <path d="M8 2 Q6 14 10 22 Q13 28 16 30 Q19 28 22 22 Q26 14 24 2 Z"/>
+      <line x1="16" y1="30" x2="16" y2="48" stroke-width="2" stroke="currentColor"/>
+      <line x1="9" y1="48" x2="23" y2="48" stroke-width="2" stroke="currentColor"/>
+    </svg>
+  </div>
+  <input type="file" id="foto-input" accept="image/*">
+</div>
+
+<main class="page">
+
+  <section class="idiom-section">
+    <div class="locatie-tag">Curaçao, strand & tafel</div>
+
+    <h1 class="idiom-word">
+      <span class="accent">P</span>abien
+    </h1>
+
+    <p class="idiom-phonetic">Papiamentu &nbsp;·&nbsp; uitgesproken: "pa-BIEN" &nbsp;·&nbsp; gefeliciteerd, van harte</p>
+    <div class="idiom-line"></div>
+
+    <p class="idiom-meaning">
+      Meer dan een felicitatie — <em>pabien</em> is de warmte waarmee
+      Curaçao iemand viert. Je zegt het bij een verjaardag,
+      een prestatie, een thuiskomst. Het woord heeft geen haast,
+      geen formaliteit. Het meent het gewoon.
+    </p>
+  </section>
+
+  <section class="narrative-section">
+    <div class="narrative-text">
+      <p>
+        De ochtend begon in het water. Snorkelen boven het rif:
+        koraal in alle kleuren die de zee al weet, vissen die
+        de weg niet opzij gaan voor je. Daarna: zand,
+        zon, het gevoel dat de dag al geslaagd was
+        en het nog geen middag was.
+      </p>
+
+      <div class="menu-note">
+        <p class="menu-note-label">Fine dining &nbsp;·&nbsp; verjaardagsdiner</p>
+        <p class="menu-note-line">zeevruchten, limoen, zeezout</p>
+        <p class="menu-note-line">vis op hout, kruiden, stilte aan tafel</p>
+        <p class="menu-note-line">wijn die rood was en naar de avond smaakte</p>
+      </div>
+
+      <p>
+        Het diner was voor de verjaardag — een tafel,
+        kaarsen, mensen om wie je geeft.
+        Buiten bewoog de palmboom in de wind.
+        Het glas werd gevuld en gevuld en langzaam
+        leeggedronken, en niemand keek op de tijd.
+      </p>
+    </div>
+
+    <blockquote class="reflection">
+      Pabien past bij deze dag omdat vieren geen reden nodig heeft —
+      het strand, het rif, de tafel, de wijn: alles was al reden genoeg.
+    </blockquote>
+  </section>
+
+  <section class="keywords-section">
+    <p class="keywords-label">Kernwoorden van de dag</p>
+    <div class="keywords">
+      <span class="kw">strand</span>
+      <span class="kw">snorkelen</span>
+      <span class="kw">fine dining</span>
+      <span class="kw">verjaardag</span>
+      <span class="kw">wijn</span>
+      <span class="kw">kaarsen</span>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-serie">De Lokale Ziel &mdash; een reisblog</span>
+    <span class="footer-date">Curaçao &nbsp;·&nbsp; Dag 6 &nbsp;·&nbsp; 9 juni</span>
+  </footer>
+
+</main>
+
+<script>
+  const input = document.getElementById('foto-input');
+  const img   = document.getElementById('hero-img');
+  const ph    = document.getElementById('placeholder');
+
+  input.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    img.src = URL.createObjectURL(file);
+    img.style.display = 'block';
+    ph.style.display  = 'none';
+  });
+</script>
+
+</body>
+</html>

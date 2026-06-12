@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thuiskomen — Amsterdam, Dag 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:          #0e1218;
+    --ink-mid:      #263040;
+    --ink-soft:     #5070a0;
+    --ink-faint:    #a0b4cc;
+    --paper:        #f4f8fc;
+    --paper-warm:   #eaf2f8;
+    --steel:        #3868a8;
+    --steel-pale:   #c0d4ec;
+    --steel-deep:   #1a3a68;
+    --cloud:        #d8e8f4;
+    --warm:         #d4782a;
+    --warm-pale:    #f0d8b8;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  /* Aankomsthal Schiphol: grijs, zacht licht, vertrouwde koelte */
+  .hero {
+    width: 100%;
+    height: 100svh;
+    min-height: 480px;
+    max-height: 820px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(175deg,
+      #d0dce8 0%,
+      #a8c0d8 28%,
+      #6890b8 55%,
+      #2a4870 78%,
+      #0e1e38 100%
+    );
+    cursor: pointer;
+  }
+
+  /* Schiphol-licht: diffuus, gelijkmatig, niet tropisch */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 55%;
+    background: linear-gradient(to bottom,
+      rgba(220,235,248,0.35) 0%,
+      rgba(168,192,216,0.1) 60%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Vloerschaduw */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 42%;
+    background: linear-gradient(to top, rgba(14,18,24,0.65) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 10s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero:hover img { transform: scale(1.04); }
+
+  .hero-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 3;
+  }
+
+  .hero-placeholder svg {
+    width: 52px; height: 52px;
+    stroke: rgba(208,220,232,0.45); fill: none; stroke-width: 1.2;
+  }
+
+  .hero-placeholder span {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(208,220,232,0.38);
+  }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: rgba(14,18,24,0.28);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 6;
+  }
+
+  .hero:hover .hero-overlay { opacity: 1; }
+
+  .hero-overlay span {
+    color: rgba(255,255,255,0.9);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 10px 24px;
+  }
+
+  .hero input[type=file] { display: none; }
+
+  .hero-meta {
+    position: absolute;
+    top: 2rem; left: 2.5rem;
+    z-index: 7;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  .hero-meta .serie {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(208,220,232,0.58);
+  }
+
+  .hero-meta .dag-nr {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .hero-date {
+    position: absolute;
+    top: 2rem; right: 2.5rem;
+    z-index: 7;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(208,220,232,0.3);
+  }
+
+  /* Vluchtinfo linksonder — CUR → AMS */
+  .hero-flight {
+    position: absolute;
+    bottom: 2.2rem;
+    left: 2.5rem;
+    z-index: 7;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .hero-flight .route {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(208,220,232,0.5);
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-flight .flight-label {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(208,220,232,0.28);
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── WOORDBLOK ── */
+  .idiom-section {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--steel-pale);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .idiom-section::before {
+    content: 'T';
+    font-family: var(--serif);
+    font-size: 28vw;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--steel-pale);
+    position: absolute;
+    right: -1.5rem;
+    top: 1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .idiom-section > * { position: relative; z-index: 1; }
+
+  .locatie-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 2.5rem;
+  }
+
+  .locatie-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--steel);
+  }
+
+  .idiom-word {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 8.5vw, 5.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.92;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .idiom-word .accent { color: var(--steel); }
+
+  .idiom-phonetic {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+
+  .idiom-line {
+    width: 36px; height: 1px;
+    background: var(--warm);
+    margin-bottom: 1.25rem;
+  }
+
+  .idiom-meaning {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--ink-mid);
+    max-width: 520px;
+  }
+
+  .idiom-meaning em {
+    color: var(--steel-deep);
+    font-style: italic;
+  }
+
+  /* ── VLUCHTREIS — twee kolommen: voor en na ── */
+  .transit-section {
+    padding: 2.5rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr 32px 1fr;
+    gap: 0;
+    align-items: center;
+    border-bottom: 1px solid var(--steel-pale);
+    padding-bottom: 2.5rem;
+    margin-bottom: 0;
+  }
+
+  .transit-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .transit-col.right { text-align: right; }
+
+  .transit-city {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .transit-label {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .transit-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--steel-pale);
+  }
+
+  .transit-arrow svg {
+    width: 20px; height: 20px;
+    stroke: var(--ink-faint); fill: none; stroke-width: 1.2;
+  }
+
+  /* ── VERHAAL ── */
+  .narrative-section { padding: 4rem 0; }
+
+  .narrative-text {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 580px;
+  }
+
+  .narrative-text p + p { margin-top: 1.5rem; }
+
+  /* Broer-moment — warm, kort, echt */
+  .arrival-moment {
+    margin: 2rem 0;
+    padding: 1.5rem 1.8rem;
+    background: var(--paper-warm);
+    border-left: 2px solid var(--warm);
+    position: relative;
+  }
+
+  .arrival-moment-text {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.7;
+  }
+
+  .arrival-moment-attr {
+    margin-top: 0.75rem;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .reflection {
+    margin: 2rem 0 0;
+    padding: 1.75rem 0 1.75rem 1.5rem;
+    border-left: 2px solid var(--steel);
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  /* ── KERNWOORDEN ── */
+  .keywords-section {
+    padding: 3rem 0 4rem;
+    border-top: 1px solid var(--steel-pale);
+  }
+
+  .keywords-label {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .kw {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-mid);
+    border: 1px solid var(--steel-pale);
+    padding: 5px 15px;
+    border-radius: 30px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .kw:hover { background: var(--steel-pale); border-color: var(--steel-pale); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--steel-pale);
+    padding: 2.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-serie {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .footer-date {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 0 1.25rem; }
+    .hero-meta { left: 1.25rem; }
+    .hero-date { right: 1.25rem; }
+    .hero-flight { left: 1.25rem; }
+    .idiom-section { padding: 3rem 0 2.5rem; }
+    .idiom-section::before { font-size: 45vw; }
+    .narrative-text, .idiom-meaning { font-size: 1.1rem; }
+    .transit-section { grid-template-columns: 1fr 24px 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero:hover img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero" onclick="document.getElementById('foto-input').click()" title="Klik om een foto toe te voegen">
+  <div class="hero-placeholder" id="placeholder">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="15" rx="2"/>
+      <circle cx="12" cy="12.5" r="3.5"/>
+      <path d="M9 5l1.5-2h3L15 5"/>
+    </svg>
+    <span>Klik om jouw foto toe te voegen</span>
+  </div>
+  <img id="hero-img" src="" alt="Amsterdam, dag 8" style="display:none;">
+  <div class="hero-overlay"><span>Foto vervangen</span></div>
+  <div class="hero-meta">
+    <span class="serie">De Lokale Ziel</span>
+    <span class="dag-nr">Dag 8 — Amsterdam</span>
+  </div>
+  <div class="hero-date">11 juni</div>
+  <div class="hero-flight">
+    <span class="route">CUR → AMS</span>
+    <span class="flight-label">goede vlucht</span>
+  </div>
+  <input type="file" id="foto-input" accept="image/*">
+</div>
+
+<main class="page">
+
+  <section class="idiom-section">
+    <div class="locatie-tag">Amsterdam, aankomst</div>
+
+    <h1 class="idiom-word">
+      <span class="accent">T</span>huis&shy;komen
+    </h1>
+
+    <p class="idiom-phonetic">Nederlands &nbsp;·&nbsp; "thuis-KO-men" &nbsp;·&nbsp; het werkwoord dat een gevoel is</p>
+    <div class="idiom-line"></div>
+
+    <p class="idiom-meaning">
+      Niet simpelweg aankomen — <em>thuiskomen</em> is een toestand.
+      Je hoeft er niets voor te doen; het overkomt je.
+      Het zit in de geur van de hal, in de vertrouwde manier
+      waarop iemand zijn arm opheft. In het feit dat er iemand staat.
+    </p>
+  </section>
+
+  <!-- VLUCHTBALK -->
+  <div class="transit-section">
+    <div class="transit-col">
+      <span class="transit-city">Curaçao</span>
+      <span class="transit-label">vertrek &nbsp;·&nbsp; CUR</span>
+    </div>
+    <div class="transit-arrow">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+    </div>
+    <div class="transit-col right">
+      <span class="transit-city">Amsterdam</span>
+      <span class="transit-label">AMS &nbsp;·&nbsp; aankomst</span>
+    </div>
+  </div>
+
+  <section class="narrative-section">
+    <div class="narrative-text">
+      <p>
+        De vlucht verliep zoals goede vluchten gaan — onopgemerkt.
+        Je stapte in, praatte met mensen naast je die je niet kende
+        en bij aankomst misschien nooit meer zult zien,
+        en toch was het gesprek echt. Dat is ook iets:
+        vliegtuigen maken mensen tijdelijk eerlijker.
+      </p>
+
+      <div class="arrival-moment">
+        <p class="arrival-moment-text">
+          Hij stond er gewoon. Geen bord, geen gewacht —
+          gewoon aanwezig, zoals broers dat zijn.
+          De rest hoefde niet meer uitgelegd te worden.
+        </p>
+        <p class="arrival-moment-attr">Aankomsthal &nbsp;·&nbsp; 11 juni</p>
+      </div>
+
+      <p>
+        De warmte van Curaçao zat nog in de kleren.
+        Buiten was het Nederland — grijs, vertrouwd, van jou.
+        Thuis is geen plek die je kiest. Het is de plek
+        die al op je wacht als je de hoek omslaat.
+      </p>
+    </div>
+
+    <blockquote class="reflection">
+      Thuiskomen past bij deze dag omdat het woord zelf al zegt
+      wat er gebeurde — niet aankomen, maar thuis komen.
+      Dat zijn twee heel verschillende dingen.
+    </blockquote>
+  </section>
+
+  <section class="keywords-section">
+    <p class="keywords-label">Kernwoorden van de dag</p>
+    <div class="keywords">
+      <span class="kw">goede vlucht</span>
+      <span class="kw">nieuwe mensen</span>
+      <span class="kw">Schiphol</span>
+      <span class="kw">broer</span>
+      <span class="kw">warm welkom</span>
+      <span class="kw">thuis</span>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-serie">De Lokale Ziel &mdash; een reisblog</span>
+    <span class="footer-date">Amsterdam &nbsp;·&nbsp; Dag 8 &nbsp;·&nbsp; 11 juni</span>
+  </footer>
+
+</main>
+
+<script>
+  const input = document.getElementById('foto-input');
+  const img   = document.getElementById('hero-img');
+  const ph    = document.getElementById('placeholder');
+
+  input.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    img.src = URL.createObjectURL(file);
+    img.style.display = 'block';
+    ph.style.display  = 'none';
+  });
+</script>
+
+</body>
+</html>

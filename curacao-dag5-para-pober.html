@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Pober — Curaçao, Dag 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:          #181410;
+    --ink-mid:      #3e3020;
+    --ink-soft:     #7a6248;
+    --ink-faint:    #c0a888;
+    --paper:        #faf7f0;
+    --paper-warm:   #f4ede0;
+    --rust:         #9e4a18;
+    --rust-pale:    #ecd4c0;
+    --rust-deep:    #6e2e08;
+    --moss:         #5a7848;
+    --moss-pale:    #d4e4c8;
+    --sky:          #6898c8;
+    --sky-pale:     #d0e4f4;
+    --container-red: #b83020;
+    --container-blue: #1a5098;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  /* Rustieke sfeer: concrete rand, oud pleisterwerk, middaglucht */
+  .hero {
+    width: 100%;
+    height: 100svh;
+    min-height: 480px;
+    max-height: 820px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(170deg, #c8e0f0 0%, #a0c4e8 30%, #5888b8 65%, #2a4a70 100%);
+    cursor: pointer;
+  }
+
+  /* Waterlijn — rustiek zwembad-reflectie */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 58%;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,255,255,0.5) 15%,
+      rgba(255,255,255,0.7) 35%,
+      rgba(255,255,255,0.4) 55%,
+      rgba(255,255,255,0.6) 75%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Bodem-schaduw */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(24,20,16,0.6) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Container-blokken rechtsonder — handtekening van de dag */
+  .hero-containers {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    z-index: 4;
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+  }
+
+  .container-block {
+    width: 22px;
+    border-radius: 1px;
+    opacity: 0.55;
+  }
+
+  .container-block:nth-child(1) { height: 14px; background: var(--container-red); }
+  .container-block:nth-child(2) { height: 18px; background: var(--container-blue); }
+  .container-block:nth-child(3) { height: 12px; background: #2a8840; }
+  .container-block:nth-child(4) { height: 16px; background: var(--container-red); }
+  .container-block:nth-child(5) { height: 10px; background: #d4a820; }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 10s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero:hover img { transform: scale(1.04); }
+
+  .hero-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 3;
+  }
+
+  .hero-placeholder svg {
+    width: 52px; height: 52px;
+    stroke: rgba(255,255,255,0.45); fill: none; stroke-width: 1.2;
+  }
+
+  .hero-placeholder span {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: rgba(24,20,16,0.28);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 6;
+  }
+
+  .hero:hover .hero-overlay { opacity: 1; }
+
+  .hero-overlay span {
+    color: rgba(255,255,255,0.9);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 10px 24px;
+  }
+
+  .hero input[type=file] { display: none; }
+
+  .hero-meta {
+    position: absolute;
+    top: 2rem; left: 2.5rem;
+    z-index: 7;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  .hero-meta .serie {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.58);
+  }
+
+  .hero-meta .dag-nr {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .hero-date {
+    position: absolute;
+    top: 2rem; right: 2.5rem;
+    z-index: 7;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── WOORDBLOK ── */
+  .idiom-section {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--rust-pale);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .idiom-section::before {
+    content: 'P';
+    font-family: var(--serif);
+    font-size: 28vw;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--rust-pale);
+    position: absolute;
+    right: -1.5rem;
+    top: 1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: 0.65;
+  }
+
+  .idiom-section > * { position: relative; z-index: 1; }
+
+  .locatie-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 2.5rem;
+  }
+
+  .locatie-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--rust);
+  }
+
+  .idiom-word {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 9vw, 5.8rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.92;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .idiom-word .accent { color: var(--rust); }
+
+  .idiom-phonetic {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+
+  .idiom-line {
+    width: 36px; height: 1px;
+    background: var(--rust);
+    margin-bottom: 1.25rem;
+  }
+
+  .idiom-meaning {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--ink-mid);
+    max-width: 520px;
+  }
+
+  .idiom-meaning em {
+    color: var(--rust-deep);
+    font-style: italic;
+  }
+
+  /* ── VERHAAL ── */
+  .narrative-section { padding: 4rem 0; }
+
+  .narrative-text {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 580px;
+  }
+
+  .narrative-text p + p { margin-top: 1.5rem; }
+
+  /* Leesnotitie — het boek aan de rand van het zwembad */
+  .pool-note {
+    margin: 2rem 0;
+    padding: 1.4rem 1.6rem;
+    background: var(--paper-warm);
+    border-top: 1px solid var(--rust-pale);
+    border-bottom: 1px solid var(--rust-pale);
+    display: grid;
+    grid-template-columns: 3px 1fr;
+    gap: 1.2rem;
+    align-items: stretch;
+  }
+
+  .pool-note-bar {
+    background: var(--moss);
+    border-radius: 2px;
+  }
+
+  .pool-note-body {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
+  .pool-note-body strong {
+    font-weight: 500;
+    color: var(--ink-mid);
+    display: block;
+    margin-bottom: 0.2rem;
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+
+  .reflection {
+    margin: 2rem 0 0;
+    padding: 1.75rem 0 1.75rem 1.5rem;
+    border-left: 2px solid var(--sky);
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  /* ── KERNWOORDEN ── */
+  .keywords-section {
+    padding: 3rem 0 4rem;
+    border-top: 1px solid var(--rust-pale);
+  }
+
+  .keywords-label {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .kw {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-mid);
+    border: 1px solid var(--rust-pale);
+    padding: 5px 15px;
+    border-radius: 30px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .kw:hover { background: var(--rust-pale); border-color: var(--rust-pale); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--rust-pale);
+    padding: 2.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-serie {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .footer-date {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 0 1.25rem; }
+    .hero-meta { left: 1.25rem; }
+    .hero-date { right: 1.25rem; }
+    .hero-containers { right: 1.25rem; }
+    .idiom-section { padding: 3rem 0 2.5rem; }
+    .idiom-section::before { font-size: 45vw; }
+    .narrative-text, .idiom-meaning { font-size: 1.1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero:hover img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero" onclick="document.getElementById('foto-input').click()" title="Klik om een foto toe te voegen">
+  <div class="hero-placeholder" id="placeholder">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="15" rx="2"/>
+      <circle cx="12" cy="12.5" r="3.5"/>
+      <path d="M9 5l1.5-2h3L15 5"/>
+    </svg>
+    <span>Klik om jouw foto toe te voegen</span>
+  </div>
+  <img id="hero-img" src="" alt="Curaçao, dag 5" style="display:none;">
+  <div class="hero-overlay"><span>Foto vervangen</span></div>
+  <div class="hero-meta">
+    <span class="serie">De Lokale Ziel</span>
+    <span class="dag-nr">Dag 5 — Curaçao</span>
+  </div>
+  <div class="hero-date">8 juni</div>
+  <div class="hero-containers" aria-hidden="true">
+    <div class="container-block"></div>
+    <div class="container-block"></div>
+    <div class="container-block"></div>
+    <div class="container-block"></div>
+    <div class="container-block"></div>
+  </div>
+  <input type="file" id="foto-input" accept="image/*">
+</div>
+
+<main class="page">
+
+  <section class="idiom-section">
+    <div class="locatie-tag">Curaçao, ergens rustiek</div>
+
+    <h1 class="idiom-word">
+      <span class="accent">P</span>ara<br>pober
+    </h1>
+
+    <p class="idiom-phonetic">Papiamentu &nbsp;·&nbsp; uitgesproken: "PA-ra PO-ber" &nbsp;·&nbsp; letterlijk: stop maar, rustig aan</p>
+    <div class="idiom-line"></div>
+
+    <p class="idiom-meaning">
+      Je zegt het als iemand te hard zijn best doet, of te snel wil.
+      <em>Para pober</em> — stop maar, het hoeft niet zo. Op Curaçao
+      is het geen kritiek maar een uitnodiging: kom wat langzamer meedoen
+      aan de dag. Het zwembad wacht. Het boek ook.
+    </p>
+  </section>
+
+  <section class="narrative-section">
+    <div class="narrative-text">
+      <p>
+        Het zwembad was van beton en had geen filter nodig om mooi te zijn.
+        Ernaast: een stoel, een boek, de zon die langzaam van kant wisselde.
+        Er waren momenten dat je niet meer wist hoe laat het was,
+        en dat voelde als een prestatie.
+      </p>
+
+      <div class="pool-note">
+        <div class="pool-note-bar"></div>
+        <div class="pool-note-body">
+          <strong>Leesnotitie, rand van het zwembad</strong>
+          Pagina's gaan langzamer als je te warm bent en af en toe
+          het water in gaat. Dat is geen nadeel.
+        </div>
+      </div>
+
+      <p>
+        Later was er voetbal — en daarna de containers. Grote, kleurige
+        blokken gestapeld aan de haven, rood en blauw en roestig groen,
+        elk met zijn eigen bestemming ergens ver weg.
+        Ze stonden stil maar leken onderweg. Dat voelt bekend
+        op een dag die zelf ook nergens naartoe hoefde.
+      </p>
+    </div>
+
+    <blockquote class="reflection">
+      Para pober past bij deze dag omdat de mooiste uren
+      precies die zijn waarin je nergens voor hoeft te stoppen.
+    </blockquote>
+  </section>
+
+  <section class="keywords-section">
+    <p class="keywords-label">Kernwoorden van de dag</p>
+    <div class="keywords">
+      <span class="kw">rustiek zwembad</span>
+      <span class="kw">lezen</span>
+      <span class="kw">zwemmen</span>
+      <span class="kw">voetbal</span>
+      <span class="kw">containers</span>
+      <span class="kw">haven</span>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-serie">De Lokale Ziel &mdash; een reisblog</span>
+    <span class="footer-date">Curaçao &nbsp;·&nbsp; Dag 5 &nbsp;·&nbsp; 8 juni</span>
+  </footer>
+
+</main>
+
+<script>
+  const input = document.getElementById('foto-input');
+  const img   = document.getElementById('hero-img');
+  const ph    = document.getElementById('placeholder');
+
+  input.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    img.src = URL.createObjectURL(file);
+    img.style.display = 'block';
+    ph.style.display  = 'none';
+  });
+</script>
+
+</body>
+</html>
