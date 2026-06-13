@@ -50,7 +50,6 @@
     position: relative;
     overflow: hidden;
     background: #1a1008;
-    cursor: pointer;
   }
 
   /* Geschilderde muur — kleurblokken als street art */
@@ -420,7 +419,7 @@
 </head>
 <body>
 
-<div class="hero" onclick="document.getElementById('foto-input').click()" title="Klik om een foto toe te voegen">
+<div class="hero">
   <div class="hero-mural" aria-hidden="true"></div>
   <div class="hero-placeholder" id="placeholder">
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -428,16 +427,14 @@
       <circle cx="12" cy="12.5" r="3.5"/>
       <path d="M9 5l1.5-2h3L15 5"/>
     </svg>
-    <span>Klik om jouw foto toe te voegen</span>
+    <span>Foto volgt — plaats images/dag3.jpg</span>
   </div>
-  <img id="hero-img" src="" alt="Curaçao, dag 3" style="display:none;">
-  <div class="hero-overlay"><span>Foto vervangen</span></div>
+  <img id="hero-img" src="images/dag3.jpg" alt="Curaçao, dag 3" style="display:none;" onload="this.style.display='block';document.getElementById('placeholder').style.display='none';">
   <div class="hero-meta">
     <span class="serie">De Lokale Ziel</span>
     <span class="dag-nr">Dag 3 — Curaçao</span>
   </div>
   <div class="hero-date">6 juni</div>
-  <input type="file" id="foto-input" accept="image/*">
 </div>
 
 <main class="page">
@@ -508,20 +505,6 @@
   </footer>
 
 </main>
-
-<script>
-  const input = document.getElementById('foto-input');
-  const img   = document.getElementById('hero-img');
-  const ph    = document.getElementById('placeholder');
-
-  input.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    img.src = URL.createObjectURL(file);
-    img.style.display = 'block';
-    ph.style.display  = 'none';
-  });
-</script>
 
 </body>
 </html>
