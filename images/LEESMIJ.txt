@@ -1,0 +1,16 @@
+Plaats hier je foto's met precies deze bestandsnamen:
+
+  dag1.jpg  - Bon Kòrsou    (aankomst, Nieuwe Straat)
+  dag2.jpg  - Drai Laman    (Pontjesbrug, haven)
+  dag3.jpg  - Otro banda    (street art, Zanzibar)
+  dag4.jpg  - Bai buzu      (duiken, zeepaardjes)
+  dag5.jpg  - Para pober    (zwembad, containers)
+  dag6.jpg  - Pabien        (strand, verjaardagsdiner)
+  dag7.jpg  - Te awor       (laatste dag, ijsje)
+  dag8.jpg  - Thuiskomen    (Schiphol, broer)
+
+Zolang een foto ontbreekt, toont de site automatisch de
+bijpassende kleurgradiënt — niets gaat kapot.
+
+Tip: verklein foto's tot max ~2000px breed (jpg, kwaliteit 80)
+zodat de pagina's snel laden.
