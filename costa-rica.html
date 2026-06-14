@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Costa Rica — De Lokale Ziel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:       #16210f;
+    --ink-mid:   #324a22;
+    --ink-soft:  #5e7848;
+    --ink-faint: #aac090;
+    --paper:     #f7faf0;
+    --paper-2:   #ecf2dd;
+    --line:      #dde6cc;
+    --jungle:    #1f7a4d;
+    --jungle-deep: #0e4a2c;
+    --gold:      #d99a2b;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── TRIP HEADER ── */
+  /* madrugada: het uur vóór zonsopgang — donker groen dat oplicht naar dageraad-goud */
+  .trip-head {
+    background: linear-gradient(165deg, #0a2818 0%, #0e4a2c 40%, #1f7a4d 72%, #d99a2b 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* sterren — het is nog nacht */
+  .trip-head::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 16% 22%, rgba(255,255,255,0.6) 0, transparent 100%),
+      radial-gradient(1px 1px at 68% 14%, rgba(255,255,255,0.45) 0, transparent 100%),
+      radial-gradient(2px 2px at 44% 9%, rgba(255,255,255,0.7) 0, transparent 100%),
+      radial-gradient(1px 1px at 88% 26%, rgba(255,255,255,0.35) 0, transparent 100%),
+      radial-gradient(1px 1px at 30% 16%, rgba(255,255,255,0.5) 0, transparent 100%);
+    pointer-events: none;
+  }
+
+  .trip-head-inner {
+    max-width: 1000px; margin: 0 auto;
+    padding: 2rem 2rem 3.5rem;
+    position: relative; z-index: 1;
+  }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--sans);
+    font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    margin-bottom: 2.5rem;
+    transition: gap 0.25s ease, color 0.2s;
+  }
+  .back-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; transform: rotate(180deg); }
+  .back-link:hover { gap: 11px; color: #fff; }
+
+  .trip-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(217,154,43,0.95);
+    margin-bottom: 0.9rem;
+  }
+
+  .trip-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 9vw, 5.5rem);
+    font-style: italic; font-weight: 300; line-height: 0.9;
+    margin-bottom: 1.25rem;
+  }
+
+  .trip-lead {
+    font-family: var(--serif);
+    font-size: 1.3rem; font-weight: 300; line-height: 1.6;
+    color: rgba(255,255,255,0.92); max-width: 540px;
+  }
+
+  .trip-stats {
+    margin-top: 1.75rem;
+    font-family: var(--sans);
+    font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* ── DAG-GRID ── */
+  .days {
+    padding: 3.5rem 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .day {
+    display: flex; flex-direction: column;
+    background: #fff; border: 1px solid var(--line);
+    text-decoration: none; color: inherit; overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .day:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(22,33,15,0.08); }
+  .day:hover .day-word { color: var(--jungle-deep); }
+  .day:hover .day-photo img { transform: scale(1.05); }
+
+  .day-photo { position: relative; aspect-ratio: 4/3; background: var(--paper-2); overflow: hidden; }
+  .day-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; z-index: 1; }
+  .day-photo .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 0; }
+  .day-photo .ph svg { width: 30px; height: 30px; stroke: var(--ink-faint); fill: none; stroke-width: 1.1; }
+  .day-photo::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--jungle); z-index: 2; }
+
+  .day-body { padding: 1.4rem 1.4rem 0.6rem; flex: 1; }
+
+  .day-nr {
+    font-family: var(--sans);
+    font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--jungle);
+    display: flex; align-items: center; gap: 7px; margin-bottom: 0.85rem;
+  }
+  .day-nr::before { content: ''; width: 16px; height: 1px; background: var(--jungle); }
+
+  .day-word {
+    font-family: var(--serif);
+    font-size: 2rem; font-style: italic; font-weight: 300; line-height: 1;
+    margin-bottom: 0.35rem; transition: color 0.25s ease;
+  }
+  .day-lang { font-family: var(--sans); font-size: 0.58rem; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 1rem; }
+  .day-excerpt { font-family: var(--serif); font-size: 0.98rem; line-height: 1.6; color: var(--ink-mid); }
+
+  .day-go {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin: 1rem 1.4rem 1.4rem;
+    font-family: var(--sans);
+    font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: gap 0.25s ease, color 0.2s;
+  }
+  .day-go svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+  .day:hover .day-go { gap: 10px; color: var(--ink); }
+
+  /* ── LEGE STAAT ── */
+  .empty {
+    padding: 1rem 0 5rem;
+    max-width: 620px;
+  }
+
+  .empty-card {
+    padding: 2.5rem 2.25rem;
+    background: var(--paper-2);
+    border: 1px dashed var(--ink-faint);
+  }
+
+  .empty-card h2 {
+    font-family: var(--serif);
+    font-style: italic; font-weight: 300; font-size: 1.7rem;
+    color: var(--ink-mid);
+    margin-bottom: 0.85rem;
+  }
+
+  .empty-card p {
+    font-family: var(--sans);
+    font-size: 0.88rem; line-height: 1.75; color: var(--ink-soft);
+  }
+
+  .empty-card p + p { margin-top: 0.9rem; }
+
+  .empty-card code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.8rem; background: var(--paper);
+    padding: 1px 6px; border-radius: 3px; color: var(--ink-mid);
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding: 2.5rem 0; text-align: center;
+    font-family: var(--serif); font-style: italic;
+    font-size: 0.95rem; color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 1.25rem; }
+    .trip-head-inner { padding: 1.5rem 1.25rem 2.75rem; }
+    .trip-lead { font-size: 1.15rem; }
+    .days { padding: 2.5rem 0 1.5rem; gap: 1.25rem; }
+    .empty-card { padding: 2rem 1.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .day:hover { transform: none; }
+    .day:hover .day-photo img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="trip-head">
+  <div class="trip-head-inner">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      Alle reizen
+    </a>
+    <p class="trip-eyebrow">Reis II &nbsp;·&nbsp; Midden-Amerika</p>
+    <h1 class="trip-title">Costa Rica</h1>
+    <p class="trip-lead">
+      Het uur vóór zonsopgang, wanneer het land wakker wordt terwijl het nog
+      donker is. De reis begint hier — de eerste dagen volgen.
+    </p>
+    <p class="trip-stats">In voorbereiding &nbsp;·&nbsp; eerste woord: <em>madrugada</em></p>
+  </div>
+</header>
+
+<!--
+  ════════════════════════════════════════════════════════════════
+  ZODRA ER ENTRIES ZIJN:
+  vervang het <section class="empty"> blok hieronder door <main class="days wrap">
+  en plak per dag een kaart volgens dit sjabloon (kopieer een kaart
+  uit curacao.html, dezelfde structuur):
+
+  <a class="day" href="costarica-dag1-madrugada.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/cr-dag1.jpg" alt="Dag 1" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 1</p>
+      <h2 class="day-word">Madrugada</h2>
+      <p class="day-lang">Spaans · het uur voor de dageraad</p>
+      <p class="day-excerpt">Korte aankondiging van de dag.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+  ════════════════════════════════════════════════════════════════
+-->
+
+<section class="empty wrap">
+  <div class="empty-card">
+    <h2>De eerste dag komt eraan</h2>
+    <p>
+      Deze reis heeft nog geen entries. Zodra de eerste dag klaar is,
+      verschijnt hier een raster met kaarten — net als bij Curaçao.
+    </p>
+    <p>
+      Om een dag toe te voegen: maak de entry-pagina aan (bijvoorbeeld
+      <code>costarica-dag1-madrugada.html</code>), kopieer dan een dag-kaart
+      uit <code>curacao.html</code> hierheen en pas de tekst, link en kleur aan.
+      Het sjabloon staat al klaar in de comment bovenaan dit bestand.
+    </p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  De Lokale Ziel &mdash; reizen in woorden
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curaçao — De Lokale Ziel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:       #0e1f1a;
+    --ink-mid:   #2a4d44;
+    --ink-soft:  #5e8c82;
+    --ink-faint: #a8c8c2;
+    --paper:     #f5fbf9;
+    --paper-2:   #e8f5f0;
+    --line:      #d4e8e2;
+    --sea:       #0ea5b0;
+    --sea-deep:  #0e7a68;
+    --coral:     #e8602a;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── TRIP HEADER ── */
+  .trip-head {
+    background: linear-gradient(160deg, #1ab09a 0%, #0e7a68 55%, #0e4a3a 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trip-head::before {
+    content: '';
+    position: absolute;
+    top: -90px; right: -90px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(242,224,196,0.4) 0%, rgba(232,96,42,0.14) 45%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .trip-head-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 2rem 3.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    margin-bottom: 2.5rem;
+    transition: gap 0.25s ease, color 0.2s;
+  }
+
+  .back-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; transform: rotate(180deg); }
+  .back-link:hover { gap: 11px; color: #fff; }
+
+  .trip-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(242,224,196,0.85);
+    margin-bottom: 0.9rem;
+  }
+
+  .trip-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 9vw, 5.5rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 0.9;
+    margin-bottom: 1.25rem;
+  }
+
+  .trip-lead {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.92);
+    max-width: 520px;
+  }
+
+  .trip-stats {
+    margin-top: 1.75rem;
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .trip-stats .dot { color: rgba(255,255,255,0.4); margin: 0 0.55rem; }
+
+  /* ── DAG-GRID ── */
+  .days {
+    padding: 3.5rem 0 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .day {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .day:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(14,31,26,0.08); }
+  .day:hover .day-word { color: var(--sea-deep); }
+  .day:hover .day-photo img { transform: scale(1.05); }
+
+  .day-photo {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+
+  .day-photo img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+    z-index: 1;
+  }
+
+  .day-photo .ph {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 0;
+  }
+
+  .day-photo .ph svg { width: 30px; height: 30px; stroke: var(--ink-faint); fill: none; stroke-width: 1.1; }
+
+  .day-photo::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--sea); z-index: 2;
+  }
+
+  .day-body { padding: 1.4rem 1.4rem 0.6rem; flex: 1; }
+
+  .day-nr {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sea);
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 0.85rem;
+  }
+
+  .day-nr::before { content: ''; width: 16px; height: 1px; background: var(--sea); }
+
+  .day-word {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    transition: color 0.25s ease;
+  }
+
+  .day-lang {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .day-excerpt {
+    font-family: var(--serif);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--ink-mid);
+  }
+
+  .day-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 1rem 1.4rem 1.4rem;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: gap 0.25s ease, color 0.2s;
+  }
+
+  .day-go svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+  .day:hover .day-go { gap: 10px; color: var(--ink); }
+
+  /* dag 8 — Amsterdam, andere accentkleur */
+  .day--ams .day-photo::after { background: #3868a8; }
+  .day--ams .day-nr { color: #3868a8; }
+  .day--ams .day-nr::before { background: #3868a8; }
+  .day--ams:hover .day-word { color: #1a3a68; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding: 2.5rem 0;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 1.25rem; }
+    .trip-head-inner { padding: 1.5rem 1.25rem 2.75rem; }
+    .trip-lead { font-size: 1.15rem; }
+    .days { padding: 2.5rem 0 4rem; gap: 1.25rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .day:hover { transform: none; }
+    .day:hover .day-photo img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="trip-head">
+  <div class="trip-head-inner">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      Alle reizen
+    </a>
+    <p class="trip-eyebrow">Reis I &nbsp;·&nbsp; Caribisch gebied</p>
+    <h1 class="trip-title">Curaçao</h1>
+    <p class="trip-lead">
+      Een week op het eiland — van de eerste felle zon tot het zachte
+      afscheid — en de stille thuiskomst die erop volgde.
+    </p>
+    <p class="trip-stats">8 entries <span class="dot">·</span> 4 – 11 juni <span class="dot">·</span> Papiamentu &amp; Nederlands</p>
+  </div>
+</header>
+
+<main class="days wrap">
+
+  <!-- DAG 1 -->
+  <a class="day" href="curacao-dag1-bon-korsou.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag1.jpg" alt="Dag 1" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 1</p>
+      <h2 class="day-word">Bon Kòrsou</h2>
+      <p class="day-lang">Papiamentu &nbsp;·&nbsp; welkom op Curaçao</p>
+      <p class="day-excerpt">De zon sloeg je tegemoet vóór de deur openging. Aankomst als een andere tijd, een andere logica.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <!-- DAG 2 -->
+  <a class="day" href="curacao-dag2-drai-laman.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag2.jpg" alt="Dag 2" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 2</p>
+      <h2 class="day-word">Drai Laman</h2>
+      <p class="day-lang">Papiamentu &nbsp;·&nbsp; draai de zee</p>
+      <p class="day-excerpt">De zee kwam drie keer terug — ochtend, middag, avond — en elke keer leek het de eerste keer.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <!-- DAG 3 -->
+  <a class="day" href="curacao-dag3-otrabanda.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag3.jpg" alt="Dag 3" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 3</p>
+      <h2 class="day-word">Otro banda</h2>
+      <p class="day-lang">Papiamentu &nbsp;·&nbsp; de andere kant</p>
+      <p class="day-excerpt">De muren in Otrabanda praten. De mooiste dingen blijken altijd aan de andere kant te zitten.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <!-- DAG 4 -->
+  <a class="day" href="curacao-dag4-bai-buzu.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag4.jpg" alt="Dag 4" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 4</p>
+      <h2 class="day-word">Bai buzu</h2>
+      <p class="day-lang">Papiamentu &nbsp;·&nbsp; ga duiken</p>
+      <p class="day-excerpt">Onder water is alles stil op een manier die boven water niet bestaat. Wie gedoken heeft, kijkt anders.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <!-- DAG 5 -->
+  <a class="day" href="curacao-dag5-para-pober.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag5.jpg" alt="Dag 5" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 5</p>
+      <h2 class="day-word">Para pober</h2>
+      <p class="day-lang">Papiamentu &nbsp;·&nbsp; rustig aan</p>
+      <p class="day-excerpt">De mooiste uren zijn precies die waarin je nergens voor hoeft te stoppen. Het zwembad wacht. Het boek ook.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <!-- DAG 6 -->
+  <a class="day" href="curacao-dag6-pabien.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag6.jpg" alt="Dag 6" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 6</p>
+      <h2 class="day-word">Pabien</h2>
+      <p class="day-lang">Papiamentu &nbsp;·&nbsp; van harte, gefeliciteerd</p>
+      <p class="day-excerpt">Vieren heeft geen reden nodig — het strand, het rif, de tafel, de wijn: alles was al reden genoeg.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <!-- DAG 7 -->
+  <a class="day" href="curacao-dag7-te-awor.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag7.jpg" alt="Dag 7" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 7</p>
+      <h2 class="day-word">Te awor</h2>
+      <p class="day-lang">Papiamentu &nbsp;·&nbsp; tot ziens voor nu</p>
+      <p class="day-excerpt">Niet het definitieve adiós, maar het zachte afscheid dat een deur openhoudt. Geen einde, alleen een pauze.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <!-- DAG 8 — AMSTERDAM -->
+  <a class="day day--ams" href="amsterdam-dag8-thuiskomen.html">
+    <div class="day-photo">
+      <div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg></div>
+      <img src="images/dag8.jpg" alt="Dag 8" onerror="this.style.display='none'">
+    </div>
+    <div class="day-body">
+      <p class="day-nr">Dag 8 &nbsp;·&nbsp; Amsterdam</p>
+      <h2 class="day-word">Thuiskomen</h2>
+      <p class="day-lang">Nederlands &nbsp;·&nbsp; het werkwoord dat een gevoel is</p>
+      <p class="day-excerpt">Niet aankomen, maar thuis komen. Dat zijn twee heel verschillende dingen. Er stond iemand. De rest hoefde niet uitgelegd.</p>
+    </div>
+    <span class="day-go">Lees entry <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+</main>
+
+<footer class="site-footer">
+  De Lokale Ziel &mdash; reizen in woorden
+</footer>
+
+</body>
+</html>
