@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peri Bacaları — Cappadocië, Dag 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:          #1a1714;
+    --ink-mid:      #3e3832;
+    --ink-soft:     #78706a;
+    --ink-faint:    #bcb2a6;
+    --paper:        #f8f5f0;
+    --paper-warm:   #efe8dc;
+    --tuff:         #a8783c;
+    --tuff-pale:    #ead9be;
+    --tuff-deep:    #6e4a1c;
+    --slate:        #5a6470;
+    --slate-pale:   #d4d8dc;
+    --grass:        #c49a50;
+    --basalt:       #3a3632;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  /* Lage grijze lucht boven droog, goudkleurig gras */
+  .hero {
+    width: 100%;
+    height: 100svh;
+    min-height: 480px;
+    max-height: 820px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg,
+      #8a929c 0%,
+      #a8adb2 30%,
+      #c8bca8 58%,
+      #b8935a 78%,
+      #5a4428 100%
+    );
+  }
+
+  /* Wolkendek — zware, lage bewolking */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 45%;
+    background:
+      radial-gradient(ellipse 60% 40% at 25% 20%, rgba(70,78,88,0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 35% at 75% 30%, rgba(60,66,76,0.3) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Bodemschaduw */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(26,23,20,0.62) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 10s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero:hover img { transform: scale(1.04); }
+
+  .hero-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 2;
+  }
+
+  .hero-placeholder svg {
+    width: 52px; height: 52px;
+    stroke: rgba(248,245,240,0.5); fill: none; stroke-width: 1.2;
+  }
+
+  .hero-placeholder span {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(248,245,240,0.45);
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 2rem; left: 2.5rem;
+    z-index: 7;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  .hero-meta .serie {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(248,245,240,0.7);
+  }
+
+  .hero-meta .dag-nr {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.92);
+  }
+
+  .hero-date {
+    position: absolute;
+    top: 2rem; right: 2.5rem;
+    z-index: 7;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(248,245,240,0.55);
+    text-align: right;
+  }
+
+  /* Hoogte rechtsonder — het plateau */
+  .hero-alt {
+    position: absolute;
+    bottom: 2.2rem;
+    right: 2.5rem;
+    z-index: 7;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+
+  .hero-alt .alt-num {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(248,245,240,0.6);
+    line-height: 1;
+  }
+
+  .hero-alt .alt-unit {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(248,245,240,0.38);
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── WOORDBLOK ── */
+  .idiom-section {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--tuff-pale);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .idiom-section::before {
+    content: 'P';
+    font-family: var(--serif);
+    font-size: 28vw;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--tuff-pale);
+    position: absolute;
+    right: -1.5rem;
+    top: 1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: 0.7;
+  }
+
+  .idiom-section > * { position: relative; z-index: 1; }
+
+  .locatie-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tuff);
+    margin-bottom: 2.5rem;
+  }
+
+  .locatie-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--tuff);
+  }
+
+  .idiom-word {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 9vw, 5.8rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.92;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .idiom-word .accent { color: var(--tuff); }
+
+  .idiom-phonetic {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+
+  .idiom-line {
+    width: 36px; height: 1px;
+    background: var(--slate);
+    margin-bottom: 1.25rem;
+  }
+
+  .idiom-meaning {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--ink-mid);
+    max-width: 520px;
+  }
+
+  .idiom-meaning em {
+    color: var(--tuff-deep);
+    font-style: italic;
+  }
+
+  /* ── VERHAAL ── */
+  .narrative-section { padding: 4rem 0; }
+
+  .narrative-text {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 580px;
+  }
+
+  .narrative-text p + p { margin-top: 1.5rem; }
+
+  /* Signature: geologische doorsnede — hoe een kegel ontstaat */
+  .strata {
+    margin: 2.5rem 0;
+    border: 1px solid var(--tuff-pale);
+    background: var(--paper-warm);
+    display: grid;
+    grid-template-columns: 64px 1fr;
+  }
+
+  .strata-col {
+    display: grid;
+    grid-template-rows: 1fr 2.4fr 1.2fr;
+  }
+
+  .strata-col span:nth-child(1) { background: var(--basalt); }
+  .strata-col span:nth-child(2) {
+    background:
+      repeating-linear-gradient(0deg, rgba(110,74,28,0.08) 0 2px, transparent 2px 9px),
+      var(--tuff-pale);
+  }
+  .strata-col span:nth-child(3) { background: var(--grass); opacity: 0.75; }
+
+  .strata-body { padding: 1.4rem 1.6rem; }
+
+  .strata-label {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.9rem;
+  }
+
+  .strata-row + .strata-row {
+    border-top: 1px solid var(--tuff-pale);
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+  }
+
+  .strata-row strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-mid);
+  }
+
+  .strata-row span {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .reflection {
+    margin: 2rem 0 0;
+    padding: 1.75rem 0 1.75rem 1.5rem;
+    border-left: 2px solid var(--slate);
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  /* ── KERNWOORDEN ── */
+  .keywords-section {
+    padding: 3rem 0 4rem;
+    border-top: 1px solid var(--tuff-pale);
+  }
+
+  .keywords-label {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .kw {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-mid);
+    border: 1px solid var(--tuff-pale);
+    padding: 5px 15px;
+    border-radius: 30px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .kw:hover { background: var(--tuff-pale); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--tuff-pale);
+    padding: 2.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-serie {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .footer-date {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 0 1.25rem; }
+    .hero-meta { left: 1.25rem; }
+    .hero-date { right: 1.25rem; }
+    .hero-alt { right: 1.25rem; }
+    .idiom-section { padding: 3rem 0 2.5rem; }
+    .idiom-section::before { font-size: 45vw; }
+    .narrative-text, .idiom-meaning { font-size: 1.1rem; }
+    .strata { grid-template-columns: 36px 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero:hover img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-placeholder" id="placeholder">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="15" rx="2"/>
+      <circle cx="12" cy="12.5" r="3.5"/>
+      <path d="M9 5l1.5-2h3L15 5"/>
+    </svg>
+    <span>images/cappadocie-dag1.jpg</span>
+  </div>
+  <img id="hero-img" src="images/cappadocie-dag1.jpg" alt="Rotskegels in Cappadocië onder een grijze lucht" style="display:none;" onload="this.style.display='block';document.getElementById('placeholder').style.display='none';">
+  <div class="hero-meta">
+    <span class="serie">De Lokale Ziel</span>
+    <span class="dag-nr">Dag 1 — Cappadocië</span>
+  </div>
+  <div class="hero-date">29 oktober</div>
+  <div class="hero-alt">
+    <span class="alt-num">~1100</span>
+    <span class="alt-unit">meter hoogvlakte</span>
+  </div>
+</div>
+
+<main class="page">
+
+  <section class="idiom-section">
+    <div class="locatie-tag">Cappadocië, Turkije</div>
+
+    <h1 class="idiom-word">
+      <span class="accent">P</span>eri<br>bacaları
+    </h1>
+
+    <p class="idiom-phonetic">Turks &nbsp;·&nbsp; uitgesproken: "pe-RIE ba-dja-la-RU" &nbsp;·&nbsp; letterlijk: schoorstenen van de feeën</p>
+    <div class="idiom-line"></div>
+
+    <p class="idiom-meaning">
+      Zo noemen ze hier de rotskegels die overal uit de grond steken.
+      Lang geloofden mensen dat er wezens in woonden — <em>peri</em>,
+      feeën — want iets anders kon zulke vormen niet verklaren.
+      Het woord is gebleven, ook nu iedereen weet dat het wind en water was.
+    </p>
+  </section>
+
+  <section class="narrative-section">
+    <div class="narrative-text">
+      <p>
+        De lucht hing laag en grijs, zwaar van een regen die niet viel.
+        Daaronder stonden de kegels, tientallen, alsof iemand ze had neergezet
+        en vergeten op te ruimen. Geen twee hebben dezelfde vorm.
+        Het gras ertussen was droog en goud, de paden wit van stof
+        dat ooit as was.
+      </p>
+
+      <div class="strata" aria-label="Doorsnede van een feeënschoorsteen">
+        <div class="strata-col" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="strata-body">
+          <p class="strata-label">Doorsnede &nbsp;·&nbsp; hoe een kegel ontstaat</p>
+          <div class="strata-row">
+            <strong>Harde kap</strong>
+            <span>Een laag die trager slijt en de rots eronder beschermt, als een hoed.</span>
+          </div>
+          <div class="strata-row">
+            <strong>Tufsteen</strong>
+            <span>Samengeperste vulkanische as van uitbarstingen, miljoenen jaren geleden. Zacht genoeg om met de hand in te graven.</span>
+          </div>
+          <div class="strata-row">
+            <strong>Het dal</strong>
+            <span>Wat wind en water meenamen. Wat overbleef, staat nog.</span>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Aan de rand van het beeld stond een rood busje, klein als speelgoed.
+        Pas daaraan zag je hoe groot alles was. Het landschap gaf geen houvast:
+        geen huis, geen boom van formaat, geen hoek die je herkende.
+        Exotisch zat hier niet in warmte of kleur, maar in het gevoel
+        op een andere planeet te zijn geland — met lucht die je gewoon kunt inademen.
+      </p>
+    </div>
+
+    <blockquote class="reflection">
+      Peri bacaları past bij deze dag omdat dit landschap om een verklaring vraagt —
+      en de mensen hier gaven het eerst een sprookje, pas later een geologie.
+    </blockquote>
+  </section>
+
+  <section class="keywords-section">
+    <p class="keywords-label">Kernwoorden van de dag</p>
+    <div class="keywords">
+      <span class="kw">aankomst</span>
+      <span class="kw">grijze lucht</span>
+      <span class="kw">rotskegels</span>
+      <span class="kw">tufsteen</span>
+      <span class="kw">droog gras</span>
+      <span class="kw">buitenaards</span>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-serie">De Lokale Ziel &mdash; een reisblog</span>
+    <span class="footer-date">Cappadocië &nbsp;·&nbsp; Dag 1 &nbsp;·&nbsp; 29 oktober</span>
+  </footer>
+
+</main>
+
+</body>
+</html>
