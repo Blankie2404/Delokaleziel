@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madrugada — Costa Rica, Dag 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:        #171a33;
+    --ink-mid:    #3a3f66;
+    --ink-soft:   #6f7398;
+    --ink-faint:  #b4b6cc;
+    --paper:      #f8f5f0;
+    --paper-warm: #f1ebe2;
+    --nacht:      #252a52;
+    --dageraad:   #e9a27a;
+    --dageraad-pale: #f6dccb;
+    --goud:       #d99a2b;
+    --goud-deep:  #a8701a;
+    --groen:      #1f7a4d;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO: van nacht naar eerste licht ── */
+  .hero {
+    width: 100%;
+    height: 100svh;
+    min-height: 480px;
+    max-height: 820px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0f1128 0%, #252a52 45%, #5a4a6e 75%, #e9a27a 100%);
+  }
+  .hero::after {
+    content: '';
+    position: absolute; left: 0; right: 0; bottom: 0; height: 40%;
+    background: linear-gradient(to top, rgba(15,17,40,0.55), transparent);
+    z-index: 3; pointer-events: none;
+  }
+  .hero img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    position: relative; z-index: 2;
+  }
+  .hero-meta {
+    position: absolute; top: 2rem; left: 2.5rem; z-index: 6;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .hero-meta .serie {
+    font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(246,220,203,0.75);
+  }
+  .hero-meta .dag-nr {
+    font-family: var(--serif); font-size: 1rem; font-style: italic;
+    color: rgba(255,255,255,0.9);
+  }
+  .hero-date {
+    position: absolute; top: 2rem; right: 2.5rem; z-index: 6;
+    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(246,220,203,0.6);
+  }
+
+  .page { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── WOORDBLOK ── */
+  .idiom-section {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--dageraad-pale);
+    position: relative; overflow: hidden;
+  }
+  /* M is breed: minder negatieve offset dan B */
+  .idiom-section::before {
+    content: 'M';
+    font-family: var(--serif); font-size: 26vw; font-style: italic; font-weight: 300;
+    color: var(--paper-warm);
+    position: absolute; right: 0.5rem; top: 1rem; line-height: 1;
+    pointer-events: none; user-select: none; z-index: 0;
+  }
+  .idiom-section > * { position: relative; z-index: 1; }
+
+  .locatie-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--groen); margin-bottom: 2.5rem;
+  }
+  .locatie-tag::before { content: ''; width: 20px; height: 1px; background: var(--groen); }
+
+  .idiom-word {
+    font-family: var(--serif);
+    font-size: clamp(3.2rem, 10vw, 6rem);
+    font-weight: 300; font-style: italic; line-height: 0.9;
+    margin-bottom: 1.25rem; letter-spacing: -0.01em;
+  }
+  .idiom-word .accent { color: var(--goud); }
+  .idiom-phonetic {
+    font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+  .idiom-line { width: 36px; height: 1px; background: var(--goud); margin-bottom: 1.25rem; }
+  .idiom-meaning {
+    font-family: var(--serif); font-size: 1.25rem; font-weight: 400;
+    line-height: 1.65; color: var(--ink-mid); max-width: 520px;
+  }
+  .idiom-meaning em { color: var(--goud-deep); font-style: italic; }
+
+  /* ── SIGNATUUR: dubbele klok ── */
+  .klok-section { padding: 3.5rem 0 1rem; }
+  .klok-label {
+    font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 1.5rem;
+  }
+  .klok {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 1.5rem;
+  }
+  .klok-stad { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+  .klok-tijd {
+    font-family: var(--serif); font-size: clamp(2.4rem, 7vw, 3.4rem);
+    font-weight: 300; line-height: 1; color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .klok-noot { font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--ink-soft); }
+  .klok-rechts { text-align: right; }
+  .klok-midden {
+    font-family: var(--serif); font-style: italic; font-size: 1rem;
+    color: var(--goud-deep); padding-bottom: 0.6rem; white-space: nowrap;
+  }
+  .dagbalk {
+    margin-top: 1.75rem; height: 6px; border-radius: 3px; position: relative;
+    background: linear-gradient(90deg, #0f1128 0%, #252a52 12%, #e9a27a 22%, #f6dccb 50%, #d99a2b 78%, #252a52 100%);
+  }
+  .dagbalk-schaal {
+    display: flex; justify-content: space-between; margin-top: 0.5rem;
+    font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint);
+  }
+
+  /* ── VERHAAL ── */
+  .narrative-section { padding: 3rem 0 4rem; }
+  .narrative-text {
+    font-family: var(--serif); font-size: 1.25rem; font-weight: 300;
+    line-height: 1.8; max-width: 580px;
+  }
+  .narrative-text p + p { margin-top: 1.5rem; }
+  .reflection {
+    margin: 2rem 0 0; padding: 1.75rem 0 1.75rem 1.5rem;
+    border-left: 2px solid var(--goud);
+    font-family: var(--serif); font-size: 1.1rem; font-style: italic;
+    color: var(--ink-mid); line-height: 1.65;
+  }
+
+  /* ── KERNWOORDEN ── */
+  .keywords-section { padding: 3rem 0 4rem; border-top: 1px solid var(--dageraad-pale); }
+  .keywords-label {
+    font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 1rem;
+  }
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; }
+  .kw {
+    font-size: 0.7rem; letter-spacing: 0.1em; color: var(--ink-mid);
+    border: 1px solid var(--dageraad-pale); padding: 5px 15px; border-radius: 30px;
+  }
+
+  footer {
+    border-top: 1px solid var(--dageraad-pale); padding: 2.5rem 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  }
+  .footer-serie { font-family: var(--serif); font-style: italic; font-size: 0.9rem; color: var(--ink-soft); text-decoration: none; }
+  .footer-date { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+
+  @media (max-width: 600px) {
+    .page { padding: 0 1.25rem; }
+    .hero-meta { left: 1.25rem; }
+    .hero-date { right: 1.25rem; }
+    .idiom-section { padding: 3rem 0 2.5rem; }
+    .idiom-section::before { font-size: 42vw; right: 0; }
+    .narrative-text, .idiom-meaning { font-size: 1.1rem; }
+    .klok { grid-template-columns: 1fr 1fr; }
+    .klok-midden { grid-column: 1 / -1; grid-row: 2; padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="images/cr-dag1.jpg" alt="Costa Rica, dag 1" onerror="this.style.display='none'">
+  <div class="hero-meta">
+    <span class="serie">De Lokale Ziel</span>
+    <span class="dag-nr">Dag 1 — Costa Rica</span>
+  </div>
+  <div class="hero-date">23 november</div>
+</div>
+
+<main class="page">
+
+  <section class="idiom-section">
+    <div class="locatie-tag">Schiphol &nbsp;→&nbsp; San José</div>
+    <h1 class="idiom-word"><span class="accent">M</span>adrugada</h1>
+    <p class="idiom-phonetic">Spaans &nbsp;·&nbsp; uitgesproken: "ma-droe-GA-da"</p>
+    <div class="idiom-line"></div>
+    <p class="idiom-meaning">
+      De uren tussen middernacht en zonsopgang. Geen nacht meer, nog geen ochtend.
+      In het Nederlands bestaat er geen woord voor; wij noemen het <em>vroeg</em>
+      en bedoelen dat het te vroeg is. Wie in Latijns-Amerika <em>de madrugada</em>
+      op pad gaat, is niet te laat opgebleven en niet te vroeg opgestaan.
+      Hij is gewoon al onderweg.
+    </p>
+  </section>
+
+  <section class="klok-section">
+    <p class="klok-label">Twee klokken, één dag</p>
+    <div class="klok">
+      <div>
+        <p class="klok-stad">Amsterdam</p>
+        <p class="klok-tijd">04:30</p>
+        <p class="klok-noot">de wekker</p>
+      </div>
+      <div class="klok-midden">+ 7 uur cadeau</div>
+      <div class="klok-rechts">
+        <p class="klok-stad">San José</p>
+        <p class="klok-tijd">22:00</p>
+        <p class="klok-noot">het bed</p>
+      </div>
+    </div>
+    <div class="dagbalk" role="img" aria-label="Een dag van 31 uur, van nacht via daglicht terug naar nacht"></div>
+    <div class="dagbalk-schaal"><span>nacht</span><span>boven de oceaan</span><span>nacht</span></div>
+  </section>
+
+  <section class="narrative-section">
+    <div class="narrative-text">
+      <p>
+        Om half vijf is Nederland nog van niemand. De straat was nat, de taxi
+        reed zonder radio. Op Schiphol stonden de vrienden al bij de incheckbalie,
+        jassen open, koffie in de hand. We zeiden weinig. Dat hoefde ook niet;
+        iedereen wist waarom we daar zo vroeg stonden.
+      </p>
+      <p>
+        Daarna de lange vlucht. Twaalf uur waarin het buiten licht werd, licht bleef
+        en niet meer donker wilde worden, omdat we met de zon mee vlogen. Films die
+        ik niet afkeek. Een maaltijd op een tijd die nergens bij hoorde. Ergens boven
+        de oceaan raakte ik de tel kwijt, en dat voelde niet als verlies.
+      </p>
+      <p>
+        In San José was het avond. Warme lucht, een taal die ik half versta,
+        geluiden die ik niet kon plaatsen. Ik was al bijna een etmaal wakker en
+        de dag was nog steeds niet om.
+      </p>
+    </div>
+    <blockquote class="reflection">
+      Madrugada past bij deze dag omdat hij begon in een uur dat bij geen enkele
+      dag hoort — en daardoor bij allebei: de dag die we achterlieten en de dag
+      waar we in landden.
+    </blockquote>
+  </section>
+
+  <section class="keywords-section">
+    <p class="keywords-label">Kernwoorden van de dag</p>
+    <div class="keywords">
+      <span class="kw">vroeg</span>
+      <span class="kw">Schiphol</span>
+      <span class="kw">vrienden</span>
+      <span class="kw">lange vlucht</span>
+    </div>
+  </section>
+
+  <footer>
+    <a class="footer-serie" href="costa-rica.html">De Lokale Ziel &mdash; Costa Rica</a>
+    <span class="footer-date">Costa Rica &nbsp;·&nbsp; Dag 1 &nbsp;·&nbsp; 23 november</span>
+  </footer>
+
+</main>
+</body>
+</html>
