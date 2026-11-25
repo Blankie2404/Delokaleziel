@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diay — Costa Rica, Dag 1</title>
+<meta name="description" content="De Lokale Ziel — Costa Rica, dag 1: Diay. Vroeg op, lange vlucht, een ander hotel en misverstanden in San José.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Palet: avondblauw en stucwit van de gevel, goud van de kerstverlichting */
+  :root {
+    --ink:          #141c2e;
+    --ink-mid:      #2b3a5c;
+    --ink-soft:     #5f6f94;
+    --ink-faint:    #a9b3cc;
+    --paper:        #f7f4ec;
+    --paper-warm:   #efe9da;
+    --gold:         #b8862e;
+    --gold-pale:    #ecdcb6;
+    --gold-deep:    #8a6114;
+    --blue:         #34508a;
+    --blue-pale:    #e1e6f1;
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Jost', system-ui, sans-serif;
+  }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    width: 100%;
+    height: 100svh;
+    min-height: 480px;
+    max-height: 820px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(170deg, #0b1222 0%, #1d2d52 45%, #34508a 100%);
+  }
+
+  /* Warm lichtschijnsel, als van slingers */
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 220px;
+    background: radial-gradient(ellipse at center, rgba(236,220,182,0.28) 0%, rgba(184,134,46,0.12) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(11,18,34,0.55) 0%, transparent 22%),
+      linear-gradient(to top, rgba(11,18,34,0.55) 0%, transparent 35%);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+    display: block;
+    transition: transform 10s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero:hover img { transform: scale(1.04); }
+
+  .hero-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 2;
+  }
+
+  .hero-placeholder svg {
+    width: 52px; height: 52px;
+    stroke: rgba(236,220,182,0.6); fill: none; stroke-width: 1.2;
+  }
+
+  .hero-placeholder span {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(236,220,182,0.55);
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 2rem; left: 2.5rem;
+    z-index: 6;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  .hero-meta .serie {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(236,220,182,0.85);
+  }
+
+  .hero-meta .serie a { color: inherit; text-decoration: none; }
+
+  .hero-meta .dag-nr {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.92);
+  }
+
+  .hero-date {
+    position: absolute;
+    top: 2rem; right: 2.5rem;
+    z-index: 6;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(236,220,182,0.75);
+    text-align: right;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── WOORDBLOK ── */
+  .idiom-section {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--gold-pale);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .idiom-section::before {
+    content: 'D';
+    font-family: var(--serif);
+    font-size: 28vw;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--blue-pale);
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  .idiom-section > * { position: relative; z-index: 1; }
+
+  .locatie-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2.5rem;
+  }
+
+  .locatie-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--gold);
+  }
+
+  .idiom-word {
+    font-family: var(--serif);
+    font-size: clamp(3.2rem, 10vw, 6rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.9;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .idiom-word .accent { color: var(--gold); }
+
+  .idiom-phonetic {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+
+  .idiom-line {
+    width: 36px; height: 1px;
+    background: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+
+  .idiom-meaning {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--ink-mid);
+    max-width: 520px;
+  }
+
+  .idiom-meaning em {
+    color: var(--gold-deep);
+    font-style: italic;
+  }
+
+  /* ── VERHAAL ── */
+  .narrative-section { padding: 4rem 0 2rem; }
+
+  .narrative-text {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 580px;
+  }
+
+  .narrative-text p + p { margin-top: 1.5rem; }
+
+  /* ── SIGNATUUR: verwacht / gekregen ── */
+  .ledger {
+    margin: 3rem 0 1rem;
+    max-width: 580px;
+    background: #fffdf7;
+    border: 1px solid var(--gold-pale);
+    position: relative;
+    padding: 1.75rem 1.75rem 1.25rem;
+  }
+
+  /* perforatie aan de bovenrand, als van een voucher */
+  .ledger::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    height: 6px;
+    background: radial-gradient(circle at 6px 0, var(--paper) 3px, transparent 3.5px) 0 0 / 12px 6px repeat-x;
+  }
+
+  .ledger-head {
+    display: grid;
+    grid-template-columns: 7rem 1fr 1fr;
+    gap: 1rem;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--gold-pale);
+  }
+
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 7rem 1fr 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.85rem 0;
+    border-bottom: 1px dashed var(--gold-pale);
+  }
+
+  .ledger-row:last-of-type { border-bottom: none; }
+
+  .ledger-row .what {
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .ledger-row .plan {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    text-decoration: line-through;
+    text-decoration-color: var(--gold);
+    text-decoration-thickness: 1px;
+  }
+
+  .ledger-row .real {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  .ledger-stamp {
+    margin-top: 1rem;
+    text-align: right;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+  }
+
+  .ledger-stamp span {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    padding: 0.1rem 0.9rem 0.2rem;
+    transform: rotate(-4deg);
+  }
+
+  .reflection {
+    margin: 2.5rem 0 2rem;
+    padding: 1.75rem 0 1.75rem 1.5rem;
+    border-left: 2px solid var(--gold);
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.65;
+    max-width: 580px;
+  }
+
+  /* ── KERNWOORDEN ── */
+  .keywords-section {
+    padding: 3rem 0 4rem;
+    border-top: 1px solid var(--gold-pale);
+  }
+
+  .keywords-label {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .kw {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-mid);
+    border: 1px solid var(--gold-pale);
+    padding: 5px 15px;
+    border-radius: 30px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .kw:hover { background: var(--gold-pale); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--gold-pale);
+    padding: 2.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-serie {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .footer-serie a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--gold-pale); }
+
+  .footer-date {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .page { padding: 0 1.25rem; }
+    .hero-meta { left: 1.25rem; }
+    .hero-date { right: 1.25rem; }
+    .idiom-section { padding: 3rem 0 2.5rem; }
+    .idiom-section::before { font-size: 45vw; right: 1rem; }
+    .narrative-text, .idiom-meaning { font-size: 1.1rem; }
+    .ledger { padding: 1.5rem 1.1rem 1rem; }
+    .ledger-head { display: none; }
+    .ledger-row { grid-template-columns: 1fr; gap: 0.15rem; }
+    .ledger-row .plan::before { content: 'verwacht · '; font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; display: inline-block; margin-right: 4px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero:hover img { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-placeholder" id="placeholder">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="15" rx="2"/>
+      <circle cx="12" cy="12.5" r="3.5"/>
+      <path d="M9 5l1.5-2h3L15 5"/>
+    </svg>
+    <span>Foto volgt — plaats images/cr-dag1.jpg</span>
+  </div>
+  <img id="hero-img" src="images/cr-dag1.jpg" alt="Blauwe gevel met witte ornamenten, muzen en een lier, behangen met gouden kerstslingers, avond in San José" onload="document.getElementById('placeholder').style.display='none';" onerror="this.style.display='none';">
+  <div class="hero-meta">
+    <span class="serie"><a href="costa-rica.html">De Lokale Ziel</a></span>
+    <span class="dag-nr">Dag 1 — Costa Rica</span>
+  </div>
+  <div class="hero-date">23 november</div>
+</div>
+
+<main class="page">
+
+  <section class="idiom-section">
+    <div class="locatie-tag">San José, Costa Rica</div>
+
+    <h1 class="idiom-word">
+      <span class="accent">D</span>iay
+    </h1>
+
+    <p class="idiom-phonetic">Costaricaans Spaans &nbsp;·&nbsp; uitgesproken: "di-AI"</p>
+    <div class="idiom-line"></div>
+
+    <p class="idiom-meaning">
+      Een tussenwerpsel dat je buiten Costa Rica nauwelijks hoort, vermoedelijk
+      afgesleten uit <em>de ahí</em>. Het betekent <em>tja</em>, <em>nou ja</em>,
+      <em>wat wil je</em>. Een Tico zegt het met de schouders erbij als iets
+      anders loopt dan bedoeld, en daarmee is de zaak afgedaan.
+    </p>
+  </section>
+
+  <section class="narrative-section">
+    <div class="narrative-text">
+      <p>
+        De wekker ging toen het in Nederland nog nacht was. Taxi, rij,
+        paspoort, rij. Daarna uren boven de oceaan, met een klok die achteruit
+        bleef lopen. Deze dag duurde zeven uur langer dan een gewone, en dat
+        voelde ik bij het uitstappen in mijn knieën.
+      </p>
+      <p>
+        Het hotel bleek een ander hotel. Mijn vragen kregen antwoorden, maar
+        niet op wat ik had gevraagd. Ik sprak Spaans, zij spraken Spaans,
+        en toch zaten we er steeds net naast. Ergens in dat heen en weer
+        haalde de man achter de balie zijn schouders op en zei: <em>diay</em>.
+        Meer niet. Er viel ook niets meer te zeggen.
+      </p>
+      <p>
+        &rsquo;s Avonds stond ik voor een blauwe gevel met witte muzen en een lier,
+        behangen met gouden slingers. Kerst, op een zachte avond zonder jas.
+        Ook dat klopte niet met wat ik verwachtte. Ik bleef toch staan kijken.
+      </p>
+    </div>
+
+    <div class="ledger" role="table" aria-label="Verwacht tegenover gekregen">
+      <div class="ledger-head" role="row">
+        <span role="columnheader"></span>
+        <span role="columnheader">Verwacht</span>
+        <span role="columnheader">Gekregen</span>
+      </div>
+      <div class="ledger-row" role="row">
+        <span class="what" role="cell">Dag</span>
+        <span class="plan" role="cell">vierentwintig uur</span>
+        <span class="real" role="cell">eenendertig</span>
+      </div>
+      <div class="ledger-row" role="row">
+        <span class="what" role="cell">Hotel</span>
+        <span class="plan" role="cell">zoals geboekt</span>
+        <span class="real" role="cell">een ander adres</span>
+      </div>
+      <div class="ledger-row" role="row">
+        <span class="what" role="cell">Gesprek</span>
+        <span class="plan" role="cell">vraag, antwoord</span>
+        <span class="real" role="cell">vraag, ander antwoord</span>
+      </div>
+      <div class="ledger-row" role="row">
+        <span class="what" role="cell">Kerst</span>
+        <span class="plan" role="cell">kou, donker</span>
+        <span class="real" role="cell">slingers in de warmte</span>
+      </div>
+      <p class="ledger-stamp"><span>diay</span></p>
+    </div>
+
+    <blockquote class="reflection">
+      Diay past bij deze dag omdat het geen oordeel geeft. Het stelt vast dat
+      het anders liep, en gaat door. Dat bleek de enige houding die werkte.
+    </blockquote>
+  </section>
+
+  <section class="keywords-section">
+    <p class="keywords-label">Kernwoorden van de dag</p>
+    <div class="keywords">
+      <span class="kw">vroeg op</span>
+      <span class="kw">lange vlucht</span>
+      <span class="kw">tijdsverschil</span>
+      <span class="kw">ander hotel</span>
+      <span class="kw">misverstanden</span>
+      <span class="kw">blauwe gevel</span>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-serie"><a href="costa-rica.html">De Lokale Ziel &mdash; Costa Rica</a></span>
+    <span class="footer-date">Costa Rica &nbsp;·&nbsp; Dag 1 &nbsp;·&nbsp; 23 november</span>
+  </footer>
+
+</main>
+
+</body>
+</html>
